@@ -1,0 +1,13 @@
+{
+	"name": "ls-trk",
+	"description": "LS Tracker",
+	"version": "0.0.0",
+	"main": "src/ls-trk.js",
+	"license": "MIT",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test"
+	]
+}
