@@ -30,6 +30,21 @@ function buildRelease() {
 	);
 }
 
+function buildServer () {
+	var multipipe = require('multipipe'),
+		babel = require('gulp-babel'),
+		babelOptions = {};
+
+	console.log('Building app ' + version);
+
+	multipipe(
+		gulp.src('server/*.js'),
+		babel(babelOptions),
+		gulp.dest('.app'),
+		onError
+	);
+}
+
 function onError(err) {
 	if (err) {
 		console.warn('ERROR: ' + err.message || err);
@@ -45,3 +60,4 @@ gulp.task('watch', function () {
 });
 
 gulp.task('build', buildRelease);
+gulp.task('app', buildServer);
