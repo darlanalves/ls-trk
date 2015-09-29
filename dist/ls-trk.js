@@ -1,26 +1,28 @@
-'use strict';
+(function(global) {
+	'use strict';
 
-const debounce = function(fn, delay) {
+	'use strict';
+
+var debounce = function debounce(fn, delay) {
 	var timer = null;
 
-	return function() {
+	return function () {
 		var context = this,
-			args = arguments;
+		    args = arguments;
 
 		clearTimeout(timer);
-		timer = setTimeout(function() {
+		timer = setTimeout(function () {
 			fn.apply(context, args);
 		}, delay);
 	};
 };
 
+var TIMEOUT = 1000;
+var SESSIONID = String(Math.random() * 1e16);
+var events = [];
 
-const TIMEOUT = 1000;
-const SESSIONID = String(Math.random() * 1e16);
-const events = [];
-
-const dispatch = debounce(function() {
-	let stack = events.map(serialize);
+var dispatch = debounce(function () {
+	var stack = events.map(serialize);
 
 	var req = new XMLHttpRequest();
 	req.open('POST', 'http://t.leadsco.re/w');
@@ -28,12 +30,12 @@ const dispatch = debounce(function() {
 }, TIMEOUT);
 
 function track(event, data) {
-	let z = Number(new Date());
-	let payload = {
+	var z = Number(new Date());
+	var payload = {
 		id: SESSIONID,
 		e: event,
 		_: data,
-		z
+		z: z
 	};
 
 	events.push(payload);
@@ -45,9 +47,9 @@ function serialize(value) {
 }
 
 function onInteract(event) {
-	let viewport = getViewport();
-	let position = getPosition(event);
-	let interaction = getInteraction(event);
+	var viewport = getViewport();
+	var position = getPosition(event);
+	var interaction = getInteraction(event);
 
 	track('i', {
 		v: viewport,
@@ -57,7 +59,7 @@ function onInteract(event) {
 }
 
 function onScroll() {
-	let viewport = getViewport();
+	var viewport = getViewport();
 
 	track('s', {
 		v: viewport
@@ -67,20 +69,20 @@ function onScroll() {
 function getPosition(event) {
 	return {
 		x: event.clientX || event.pageX,
-		y: event.clientY || event.pageY,
+		y: event.clientY || event.pageY
 	};
 }
 
 function getInteraction(event) {
-	let u;
-	let interaction = {
+	var u = undefined;
+	var interaction = {
 		ctrl: event.ctrlKey ? 1 : u,
 		alt: event.altKey ? 1 : u,
 		shift: event.shiftKey ? 1 : u,
 		type: event.type
 	};
 
-	let element = event.srcElement || event.target;
+	var element = event.srcElement || event.target;
 	interaction.source = serializeElement(element);
 
 	if (event instanceof KeyboardEvent) {
@@ -95,7 +97,7 @@ function getInteraction(event) {
 }
 
 function getViewport() {
-	let body = document.body;
+	var body = document.body;
 
 	return {
 		x: body.scrollLeft,
@@ -106,22 +108,24 @@ function getViewport() {
 }
 
 function serializeElement(element) {
-	let id = element.id ? '#' + element.id : '';
-	let cls = element.className;
-	let tag = String(element.tagName).toLowerCase();
+	var id = element.id ? '#' + element.id : '';
+	var cls = element.className;
+	var tag = String(element.tagName).toLowerCase();
 	cls = cls && '.' + cls.split(/\s+/).sort().join('.');
 
 	return tag + id + cls;
 }
 
 (function start() {
-	let interval = 100;
+	var interval = 100;
 	document.addEventListener('mouseup', debounce(onInteract, interval));
 	document.addEventListener('keyup', debounce(onInteract, interval));
 	window.addEventListener('scroll', debounce(onScroll, interval));
 })();
 
-const Tracker = {
+var Tracker = {
 	track: track,
 	dispatch: dispatch
 };
+	global.LS = Tracker;
+})(this);

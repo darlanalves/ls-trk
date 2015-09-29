@@ -10,4 +10,7 @@ coverage:
 build:
 	./node_modules/.bin/gulp build
 
-.PHONY: test tdd build coverage
+watch:
+	./node_modules/.bin/gulp watch
+
+.PHONY: test tdd build coverage watch

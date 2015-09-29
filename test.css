@@ -1,0 +1,38 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 10px;
+    line-height: 10px;
+    font-family: sans-serif;
+}
+
+header,
+footer {
+    height: 100px;
+}
+
+header,
+footer,
+input,
+button {
+    background: #eee;
+}
+
+input,
+button {
+    border: 0;
+    padding: 1em;
+}
+
+article {
+    background: white;
+    height: 800px;
+}
+
+form {
+    padding: 2em
+}

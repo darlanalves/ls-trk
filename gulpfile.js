@@ -40,4 +40,8 @@ function onError(err) {
 	console.log('Done.');
 }
 
+gulp.task('watch', function () {
+	gulp.watch('src/*.js', ['build']);
+});
+
 gulp.task('build', buildRelease);
